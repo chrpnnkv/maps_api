@@ -27,6 +27,31 @@
      <string>l</string>
     </property>
    </widget>
+   <widget class="QComboBox" name="map_type">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>101</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>Схема</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Спутник</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Гибрид</string>
+     </property>
+    </item>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -34,7 +59,7 @@
      <x>0</x>
      <y>0</y>
      <width>801</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

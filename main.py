@@ -4,7 +4,7 @@ import requests
 import io
 from PyQt5.QtGui import QPainter, QColor, QPixmap, QImage, QPen, QTransform
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QFileDialog, QLabel, QButtonGroup
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QObject, QEvent
 from PyQt5 import uic
 from get_map_image import get_image
 
@@ -19,12 +19,27 @@ class MainWindow(QMainWindow):
 
         self.coords = start_coords
         self.scale = 0.005
-        self.curr_image = QImage(get_image(self.coords, delta=self.scale))
+        self.type_flag = True
+        self.type = ('Схема', 'map')
+        self.types = {'Схема': 'map', 'Гибрид': 'skl', 'Спутник': 'sat'}
+        self.curr_image = QImage(get_image(self.coords, l=self.type[1], delta=self.scale))
         self.images()
 
+        self.map_type.currentTextChanged.connect(self.type_change)
+        self.map_type.installEventFilter(self)
+
     def change_img(self):
-        self.curr_image = QImage(get_image(self.coords, delta=self.scale))
+        self.curr_image = QImage(get_image(self.coords, l=self.type[1], delta=self.scale))
         self.images()
+
+    def type_change(self):
+        if self.type_flag:
+            type = self.map_type.currentText()
+            self.type = (type, self.types[type])
+            self.change_img()
+        else:
+            self.map_type.setCurrentText(self.type[0])
+            self.type_flag = True
 
     def images(self):
         self.pixmap = QPixmap(self.curr_image)
@@ -32,6 +47,12 @@ class MainWindow(QMainWindow):
         self.image.setPixmap(self.pixmap)
 
         self.width, self.height = self.curr_image.width(), self.curr_image.height()
+
+    def eventFilter(self, source, event):
+        if event.type() == QEvent.KeyPress and source is self.map_type:
+            self.keyPressEvent(event)
+            self.type_flag=False
+        return super(MainWindow, self).eventFilter(source, event)
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
