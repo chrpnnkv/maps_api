@@ -3,12 +3,15 @@ import os
 import requests
 from PyQt5.QtGui import QImage
 
-def get_image(coords, l='map', delta=0.005):
+def get_image(coords, l='map', delta=0.005, pt=None):
     map_params = {
         "ll": "{0},{1}".format(*coords),
         "spn": ",".join([str(delta) for _ in range(2)]),
         "l": l
     }
+
+    if pt:
+        map_params["pt"] = "{0},{1}".format(*pt) + ',pm2rdm'
 
     map_api_server = "http://static-maps.yandex.ru/1.x/"
     response = requests.get(map_api_server, params=map_params)
