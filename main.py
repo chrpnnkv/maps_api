@@ -125,14 +125,13 @@ class MainWindow(QMainWindow):
         if event.key() == Qt.Key_PageUp:
             if self.scale > 0.002:
                 self.scale /= 2
-            print(1)
         if event.key() == Qt.Key_PageDown:
             if self.scale < 0.2:
                 self.scale *= 2
         if event.key() == Qt.Key_Up:
-            self.coords = (self.coords[0], self.coords[1] + self.scale)
+            self.coords = (self.coords[0], self.coords[1] + self.scale ** 1.2)
         if event.key() == Qt.Key_Down:
-            self.coords = (self.coords[0], self.coords[1] - self.scale)
+            self.coords = (self.coords[0], self.coords[1] - self.scale ** 1.2)
         if event.key() == Qt.Key_Left:
             self.coords = (self.coords[0] - self.scale, self.coords[1])
         if event.key() == Qt.Key_Right:
